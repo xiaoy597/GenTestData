@@ -7,48 +7,111 @@ from datetime import timedelta
 table_definition = [
     {'table': 'csdc_h_sec_tran_tst',
      'columns': [
-         {'name': 'TRAD_NBR', 'type': 'SERIAL', 'range': [1, 99999999999]},
-         {'name': 'TRAD_DIRC', 'type': 'STRING', 'enum': ['B', 'S']},
-         {'name': 'SHDR_ACCT', 'type': 'NUMBER', 'range': [100000000, 300000000]},
-         {'name': 'SHDR_TYPE', 'type': 'STRING', 'enum': ['0']},
-         {'name': 'MST_SEAT_CDE', 'type': 'STRING', 'enum': ['000000']},
-         {'name': 'SEAT_CDE', 'type': 'STRING', 'enum': ['000000']},
-         {'name': 'SEC_CDE', 'type': 'STRING', 'expr': "stocks[int({rand})]['stock_id']", 'range': [239, 1587],
-          'save_rand': True},
-         {'name': 'CAP_TYPE', 'type': 'STRING', 'enum': ['JJ', 'PT', 'PZ', 'GZ']},
-         {'name': 'NEGT_TYPE', 'type': 'STRING', 'enum': ['0']},
-         {'name': 'EQUT_TYPE', 'type': 'STRING', 'enum': ['DF', 'DX', 'HL']},
-         {'name': 'EQUT_YEARS', 'type': 'NUMBER', 'range': [1, 10]},
-         {'name': 'TRANS_TYPE', 'type': 'STRING', 'enum': ['00A']},
-         {'name': 'TRANS_DATE', 'type': 'DATE', 'expr': 'data_date'},
-         {'name': 'TRANS_VOL', 'type': 'NUMBER', 'range': [1, 9999999],
+         {'id': 1, 'name': 'TRAD_NBR', 'type': 'NUMBER', 'expr': '{serial}', 'range': [1, 99999999999]},
+         {'id': 2, 'name': 'TRAD_DIRC', 'type': 'STRING', 'enum': ['B', 'S']},
+         {'id': 3, 'name': 'SHDR_ACCT', 'type': 'NUMBER', 'range': [10000, 30000], 'format': '%020d'},
+         {'id': 4, 'name': 'SHDR_TYPE', 'type': 'STRING', 'enum': ['0']},
+         {'id': 5, 'name': 'MST_SEAT_CDE', 'type': 'STRING', 'enum': ['000000']},
+         {'id': 6, 'name': 'SEAT_CDE', 'type': 'STRING', 'enum': ['000000']},
+         {'id': 7, 'name': 'SEC_CDE', 'type': 'STRING', 'expr': "stocks[int({rand})]['stock_id']", 'range': [239, 1586]},
+         {'id': 8, 'name': 'CAP_TYPE', 'type': 'STRING', 'enum': ['JJ', 'PT', 'PZ', 'GZ']},
+         {'id': 9, 'name': 'NEGT_TYPE', 'type': 'STRING', 'enum': ['0']},
+         {'id': 10, 'name': 'EQUT_TYPE', 'type': 'STRING', 'enum': ['DF', 'DX', 'HL']},
+         {'id': 11, 'name': 'EQUT_YEARS', 'type': 'NUMBER', 'range': [1, 10]},
+         {'id': 12, 'name': 'TRANS_TYPE', 'type': 'STRING', 'enum': ['00A']},
+         {'id': 13, 'name': 'TRANS_DATE', 'type': 'DATE', 'expr': 'data_date'},
+         {'id': 14, 'name': 'TRANS_VOL', 'type': 'NUMBER', 'range': [1, 9999999],
           'dist': {'type': 'normal', 'mu': 100, 'sigma': 50}},
-         {'name': 'THIS_BAL', 'type': 'NUMBER', 'range': [0, 0]},
-         {'name': 'SRC_TRAN_PRC', 'type': 'NUMBER', 'expr': "stocks[int(save_rand)]['close_price'] * {rand}",
+         {'id': 15, 'name': 'THIS_BAL', 'type': 'NUMBER', 'range': [0, 0]},
+         {'id': 16, 'name': 'SRC_TRAN_PRC', 'type': 'NUMBER', 'expr': "stocks[int({last_rand})]['close_price'] * {rand}",
           'range': [0.9, 1.1], 'format': '%.2f'},
-         {'name': 'TRAN_PRC', 'type': 'NUMBER', 'copy': 'SRC_TRAN_PRC'},
-         {'name': 'TRAD_TIME', 'type': 'TIME', 'format': 'HHMMSS', 'range': [93000, 113100, 130000, 150100]},
-         {'name': 'APLY_NBR', 'type': 'STRING', 'enum': ['0000000000000000000']},
-         {'name': 'DATA_DATE', 'type': 'DATE', 'expr': 'data_date'},
+         {'id': 17, 'name': 'TRAN_PRC', 'type': 'NUMBER', 'copy': 'SRC_TRAN_PRC', 'format': '%.2f'},
+         {'id': 18, 'name': 'TRAD_TIME', 'type': 'TIME', 'tm_format': 'HHMMSS',
+          'range': [93000, 113100, 130000, 150100]},
+         {'id': 19, 'name': 'APLY_NBR', 'type': 'STRING', 'enum': ['0000000000000000000']},
+         {'id': 20, 'name': 'DATA_DATE', 'type': 'DATE', 'expr': 'data_date'},
      ]},
     {'table': 'csdc_s_sec_tran_tst',
      'columns': [
-         {'name': 'SEC_CDE', 'type': 'STRING', 'expr': "stocks[int({rand})]['stock_id']", 'range': [0, 1348],
-         'save_rand': True},
-         {'name': 'SEAT_CDE', 'type': 'STRING', 'enum': ['000000']},
-         {'name': 'SHDR_ACCT', 'type': 'NUMBER', 'range': [400000000, 600000000]},
-         {'name': 'TRAD_DIRC', 'type': 'STRING', 'enum': ['B', 'S']},
-         {'name': 'CNTR_NBR', 'type': 'SERIAL', 'range': [1, 99999999999], 'format': '%024d'},
-         {'name': 'TRAD_NBR', 'type': 'SERIAL', 'range': [1, 99999999999], 'format': '%018d'},
-         {'name': 'TRANS_VOL', 'type': 'NUMBER', 'range': [1, 9999999],
+         {'id': 1, 'name': 'SEC_CDE', 'type': 'STRING', 'expr': "stocks[int({rand})]['stock_id']", 'range': [0, 1347]},
+         {'id': 2, 'name': 'SEAT_CDE', 'type': 'STRING', 'enum': ['000000']},
+         {'id': 3, 'name': 'SHDR_ACCT', 'type': 'NUMBER', 'range': [40000, 60000], 'format': '%020d'},
+         {'id': 4, 'name': 'TRAD_DIRC', 'type': 'STRING', 'enum': ['B', 'S']},
+         {'id': 5, 'name': 'CNTR_NBR', 'type': 'NUMBER', 'expr': '{serial}', 'range': [1, 99999999999], 'format': '%024d'},
+         {'id': 6, 'name': 'TRAD_NBR', 'type': 'NUMBER', 'expr': 'CNTR_NBR', 'format': '%018d'},
+         {'id': 7, 'name': 'TRANS_VOL', 'type': 'NUMBER', 'range': [1, 9999999],
           'dist': {'type': 'normal', 'mu': 100, 'sigma': 50}},
-         {'name': 'TRAN_PRC', 'type': 'NUMBER', 'expr': "stocks[int(save_rand)]['close_price'] * {rand}",
+         {'id': 8, 'name': 'TRAN_PRC', 'type': 'NUMBER', 'expr': "stocks[int({last_rand})]['close_price'] * {rand}",
           'range': [0.9, 1.1], 'format': '%.2f'},
-         {'name': 'TRAD_TIME', 'type': 'TIME', 'format': 'HHMMSS', 'range': [93000, 113100, 130000, 150100]},
-         {'name': 'CMT_FUNC', 'type': 'STRING', 'enum': ['0']},
-         {'name': 'CMT_BIZ', 'type': 'STRING', 'enum': ['0']},
-         {'name': 'CMT_BOARD', 'type': 'STRING', 'enum': ['0']},
-         {'name': 'DATA_DATE', 'type': 'DATE', 'expr': 'data_date'},
+         {'id': 9, 'name': 'TRAD_TIME', 'type': 'TIME', 'tm_format': 'HHMMSS',
+          'range': [93000, 113100, 130000, 150100]},
+         {'id': 10, 'name': 'CMT_FUNC', 'type': 'STRING', 'enum': ['0']},
+         {'id': 11, 'name': 'CMT_BIZ', 'type': 'STRING', 'enum': ['0']},
+         {'id': 12, 'name': 'CMT_BOARD', 'type': 'STRING', 'enum': ['0']},
+         {'id': 13, 'name': 'DATA_DATE', 'type': 'DATE', 'expr': 'data_date'},
+     ]},
+    {'table': 'sse_sec_idx_quot_tst',
+     'columns': [
+         {'id': 1, 'name': 'SEC_CDE', 'type': 'STRING', 'expr': "stocks[int({serial})]['stock_id']", 'range': [239, 1586]},
+         {'id': 2, 'name': 'SEC_NAME', 'type': 'STRING', 'expr': "stocks[int({last_serial})]['stock_name']"},
+         {'id': 3, 'name': 'AGO_CLS_PRC', 'type': 'NUMBER', 'expr': "stocks[int({last_serial})]['close_price']",
+          'format': '%.2f'},
+         {'id': 4, 'name': 'TS_OPN_PRC', 'type': 'NUMBER', 'expr': "AGO_CLS_PRC", 'format': '%.2f'},
+         {'id': 8, 'name': 'LTST_PRC', 'type': 'NUMBER', 'expr': "TS_OPN_PRC * {rand}", 'range': [0.9, 1.1],
+          'format': '%.2f'},
+         {'id': 9, 'name': 'TRAD_VOL', 'type': 'NUMBER', 'range': [1, 10000], 'format': '%d'},
+         {'id': 5, 'name': 'TS_TRAD_AMT', 'type': 'NUMBER', 'expr': "TRAD_VOL * LTST_PRC", 'format': '%.2f'},
+         {'id': 6, 'name': 'TOP_PRC', 'type': 'NUMBER', 'expr': 'max(AGO_CLS_PRC, LTST_PRC, {rand}*AGO_CLS_PRC)',
+          'range': [0.9, 1.1], 'format': '%.2f'},
+         {'id': 7, 'name': 'MIN_PRC', 'type': 'NUMBER', 'expr': 'min(AGO_CLS_PRC, LTST_PRC, {rand}*AGO_CLS_PRC)',
+          'range': [0.9, 1.1], 'format': '%.2f'},
+         {'id': 10, 'name': 'CRENT_BUY_PRC', 'type': 'NUMBER', 'copy': "LTST_PRC", 'format': '%.2f'},
+         {'id': 11, 'name': 'CRENT_SAL_PRC', 'type': 'NUMBER', 'copy': "LTST_PRC", 'format': '%.2f'},
+         {'id': 12, 'name': 'PE', 'type': 'NUMBER', 'range': [100, 100]},
+         {'id': 13, 'name': 'APPBY_QTT_ONE', 'type': 'NUMBER', 'copy': 'TRAD_VOL'},
+         {'id': 14, 'name': 'APPBY_PRC_TWO', 'type': 'NUMBER', 'expr': 'LTST_PRC - 0.01', 'format': '%.2f'},
+         {'id': 15, 'name': 'APPBY_QTT_TWO', 'type': 'NUMBER', 'range': [1, 100000]},
+         {'id': 16, 'name': 'APPBY_PRC_THREE', 'type': 'NUMBER', 'expr': 'LTST_PRC - 0.02', 'format': '%.2f'},
+         {'id': 17, 'name': 'APPBY_QTT_THREE', 'type': 'NUMBER', 'range': [1, 100000]},
+         {'id': 18, 'name': 'APPSL_QTT_ONE', 'type': 'NUMBER', 'copy': 'TRAD_VOL'},
+         {'id': 19, 'name': 'APPSL_PRC_TWO', 'type': 'NUMBER', 'expr': 'LTST_PRC + 0.01', 'format': '%.2f'},
+         {'id': 20, 'name': 'APPSL_QTT_TWO', 'type': 'NUMBER', 'range': [1, 100000]},
+         {'id': 21, 'name': 'APPSL_PRC_THREE', 'type': 'NUMBER', 'expr': 'LTST_PRC + 0.02', 'format': '%.2f'},
+         {'id': 22, 'name': 'APPSL_QTT_THREE', 'type': 'NUMBER', 'range': [1, 100000]},
+         {'id': 23, 'name': 'APPBY_PRC_FR', 'type': 'NUMBER', 'expr': 'LTST_PRC - 0.03', 'format': '%.2f'},
+         {'id': 24, 'name': 'APPBY_QTT_FR', 'type': 'NUMBER', 'range': [1, 100000]},
+         {'id': 25, 'name': 'APPBY_PRC_FV', 'type': 'NUMBER', 'expr': 'LTST_PRC - 0.04', 'format': '%.2f'},
+         {'id': 26, 'name': 'APPBY_QTT_FV', 'type': 'NUMBER', 'range': [1, 100000]},
+         {'id': 27, 'name': 'APPSL_PRC_FR', 'type': 'NUMBER', 'expr': 'LTST_PRC + 0.03', 'format': '%.2f'},
+         {'id': 28, 'name': 'APPSL_QTT_FR', 'type': 'NUMBER', 'range': [1, 100000]},
+         {'id': 29, 'name': 'APPSL_PRC_FV', 'type': 'NUMBER', 'expr': 'LTST_PRC + 0.04', 'format': '%.2f'},
+         {'id': 30, 'name': 'APPSL_QTT_FV', 'type': 'NUMBER', 'range': [1, 100000]},
+     ]},
+    {'table': 'szse_sec_td_end_quot_tst',
+     'columns': [
+         {'id': 1, 'name': 'EXCH', 'type': 'STRING', 'enum': ['1']},
+         {'id': 2, 'name': 'SEC_CDE', 'type': 'STRING', 'expr': "stocks[{serial}]['stock_id']", 'range': [0, 1347]},
+         {'id': 3, 'name': 'SEC_ABBR', 'type': 'STRING', 'expr': "stocks[{last_serial}]['stock_name']"},
+         {'id': 4, 'name': 'CRNC_CDE', 'type': 'STRING', 'enum': ['CNY']},
+         {'id': 5, 'name': 'YDY_CLS_PRC', 'type': 'NUMBER', 'expr': "stocks[{last_serial}]['close_price']", 'format': '%.2f'},
+         {'id': 6, 'name': 'OPN_PRC', 'type': 'NUMBER', 'expr': "YDY_CLS_PRC", 'format': '%.2f'},
+         {'id': 7, 'name': 'CLS_PRC', 'type': 'NUMBER', 'expr': "YDY_CLS_PRC * {rand}", 'range': [0.9, 1.1],
+          'format': '%.2f'},
+         {'id': 8, 'name': 'TOP_PRC', 'type': 'NUMBER', 'expr': "max(YDY_CLS_PRC, CLS_PRC, YDY_CLS_PRC * {rand})",
+          'range': [0.9, 1.1], 'format': '%.2f'},
+         {'id': 9, 'name': 'MIN_PRC', 'type': 'NUMBER', 'expr': "min(YDY_CLS_PRC, CLS_PRC, YDY_CLS_PRC * {rand})",
+          'range': [0.9, 1.1], 'format': '%.2f'},
+         {'id': 10, 'name': 'TRAD_VOL', 'type': 'NUMBER', 'range': [100000, 10000000], 'format': '%d'},
+         {'id': 11, 'name': 'TRAD_AMT', 'type': 'NUMBER', 'expr': "TRAD_VOL * (TOP_PRC - MIN_PRC)/2", 'format': '%.2f'},
+         {'id': 12, 'name': 'IF_TDHL', 'type': 'STRING', 'enum': ['0']},
+         {'id': 13, 'name': 'IF_EXR_EXD', 'type': 'STRING', 'enum': ['0']},
+         {'id': 14, 'name': 'LDO_INDC', 'type': 'STRING', 'enum': ['0']},
+         {'id': 15, 'name': 'VBR_RANG', 'type': 'NUMBER', 'expr': "(TOP_PRC-MIN_PRC)/OPN_PRC", 'format': '%.2f'},
+         {'id': 16, 'name': 'CHG_RATE_DGRE', 'type': 'NUMBER', 'expr': "abs(CLS_PRC/OPN_PRC-1)", 'format': '%.2f'},
+         {'id': 17, 'name': 'TNOV_RATE1', 'type': 'NUMBER', 'expr': "{rand}", 'range': [0.01, 0.7], 'format': '%.2f'},
+         {'id': 18, 'name': 'TNOV_RATE2', 'type': 'NUMBER', 'expr': "{rand}", 'range': [0.01, 0.7], 'format': '%.2f'},
+         {'id': 19, 'name': 'CRNC_EXCH_RT', 'type': 'NUMBER', 'range': [1, 1]},
+         {'id': 20, 'name': 'DATA_DATE', 'type': 'DATE', 'expr': 'data_date'},
      ]}
 ]
 
@@ -75,6 +138,9 @@ def get_sz_stocks():
     lines = f.readlines()
 
     for i in range(len(lines)):
+        if len(lines[i].strip()) == 0:
+            continue
+
         fields = lines[i].split('|')
         stocks.append((fields[0], fields[1]))
 
@@ -92,16 +158,27 @@ def gen_table_data(params):
     table = filter(lambda x: x['table'] == params['table'], table_definition)[0]
     columns = table['columns']
 
+    sorted_columns = columns[:]
+    sorted_columns.sort(key=lambda x: x['id'])
+
     count = 0
+    values = {}
     while count < params['row_count']:
-        values = {}
+        if 'init_values' in params:
+            values.update(params['init_values'])
+
         for column in columns:
             gen_column_value(column, values, value_params)
 
-        # print values
         value_str = ''
-        for column in columns:
-            value_str = value_str + '|' + values[column['name']]
+        for column in sorted_columns:
+            # print column
+            # print values
+            if 'format' in column:
+                value = column['format'] % values[column['name']]
+            else:
+                value = str(values[column['name']]) if column['type'] != 'STRING' else values[column['name']]
+            value_str = value_str + '|' + value
         value_str += '\n'
         output.write(value_str[1:])
         count += 1
@@ -115,6 +192,14 @@ def gen_column_value(column, values, value_params):
         if 'enum' in column:
             values[column['name']] = column['enum'][int(len(column['enum']) * np.random.random())]
         elif 'expr' in column:
+            expr = column['expr']
+
+            if column['expr'].find('{last_rand}') != -1:
+                expr = expr.replace('{last_rand}', str(value_params['rand']))
+
+            if column['expr'].find('{last_serial}') != -1:
+                expr = expr.replace('{last_serial}', str(value_params['serial']))
+
             if column['expr'].find('{rand}') != -1:
                 if 'range' in column:
                     range_section = int(len(column['range']) / 2 * np.random.random())
@@ -123,17 +208,28 @@ def gen_column_value(column, values, value_params):
                            * np.random.random()
                 else:
                     rand = np.random.random()
-                if 'save_rand' in column:
-                    value_params['save_rand'] = rand
-                expr = column['expr'].replace('{rand}', str(rand))
-                values[column['name']] = str(eval(expr, value_params))
-            else:
-                values[column['name']] = str(eval(column['expr'], value_params))
+                value_params['rand'] = rand
+                expr = expr.replace('{rand}', str(rand))
+
+            if column['expr'].find('{serial}') != -1:
+                if 'serial' not in value_params:
+                    value_params['serial'] = column['range'][0] - 1
+                value_params['serial'] = value_params['serial'] + 1
+                expr = expr.replace('{serial}', str(value_params['serial']))
+
+            values[column['name']] = eval(expr, value_params, values)
 
     def gen_number(column, values, value_params):
-        # print 'generating number value for column %s' % column['name']
         value = 0
         if 'expr' in column:
+            expr = column['expr']
+
+            if column['expr'].find('{last_rand}') != -1:
+                expr = expr.replace('{last_rand}', str(value_params['rand']))
+
+            if column['expr'].find('{last_serial}') != -1:
+                expr = expr.replace('{last_serial}', str(value_params['serial']))
+
             if column['expr'].find('{rand}') != -1:
                 if 'range' in column:
                     range_section = int(len(column['range']) / 2 * np.random.random())
@@ -142,13 +238,18 @@ def gen_column_value(column, values, value_params):
                            * np.random.random()
                 else:
                     rand = np.random.random()
-                if 'save_rand' in column:
-                    value_params['save_rand'] = rand
-                expr = column['expr'].replace('{rand}', str(rand))
-            else:
-                expr = column['expr']
 
-            value = eval(expr, value_params)
+                value_params['rand'] = rand
+                expr = expr.replace('{rand}', str(rand))
+
+            if column['expr'].find('{serial}') != -1:
+                if 'serial' not in value_params:
+                    value_params['serial'] = column['range'][0] - 1
+                value_params['serial'] = value_params['serial'] + 1
+                expr = expr.replace('{serial}', str(value_params['serial']))
+
+            value = eval(expr, value_params, values)
+
         elif 'range' in column:
             range_section = int(len(column['range']) / 2 * np.random.random())
             if 'dist' not in column:
@@ -160,20 +261,16 @@ def gen_column_value(column, values, value_params):
                                column['range'][range_section + 1]),
                            column['range'][range_section])
 
-            if 'save_rand' in column:
-                value_params['save_rand'] = rand
+                value_params['rand'] = rand
 
             value = int(rand)
 
-        if 'format' in column:
-            value = column['format'] % value
-
-        values[column['name']] = str(value)
+        values[column['name']] = value
 
     def gen_date(column, values, value_params):
         # print 'generating date value for column %s' % column['name']
         if 'expr' in column:
-            values[column['name']] = str(eval(column['expr'], value_params))
+            values[column['name']] = str(eval(column['expr'], value_params, values))
 
     def gen_time(column, values, value_params):
         # print 'generating time value for column %s' % column['name']
@@ -186,13 +283,13 @@ def gen_column_value(column, values, value_params):
             end_tm = time.mktime(time.strptime('20000101' + str(end_time / 10000) + str(end_time % 10000 / 100) +
                                                str(end_time % 100), '%Y%m%d%H%M%S'))
             gen_time = time.localtime(int(start_tm + (end_tm - start_tm) * np.random.random()))
-            values[column['name']] = str(gen_time.tm_hour * 10000 + gen_time.tm_min * 100 + gen_time.tm_sec)
+            values[column['name']] = gen_time.tm_hour * 10000 + gen_time.tm_min * 100 + gen_time.tm_sec
 
     def gen_serial(column, values, value_params):
-        last_serial = value_params.get('last_serial', column['range'][0] - 1)
-        value_format = column['format'] if 'format' in column else '%d'
-        values[column['name']] = value_format % (last_serial + 1)
-        value_params['last_serial'] = last_serial + 1
+        if column['name'] not in values:
+            values[column['name']] = value_params.get('INIT_SERIAL', column['range'][0])
+        else:
+            values[column['name']] = values[column['name']] + 1
 
     generators = {
         'STRING': gen_string,
@@ -221,15 +318,33 @@ if __name__ == '__main__':
     for cur_date in date_list:
         # gen_table_data({
         #     'table': 'csdc_h_sec_tran_tst',
-        #     'row_count': 10000,
+        #     'row_count': 1000000,
         #     'data_date': str(cur_date),
         #     'data_file': r'c:\tmp\csdc_h_sec_tran_tst.dat',
-        #     'stocks': [{'stock_id': stock[0], 'close_price': np.random.random() * 99 + 1} for stock in sh_stocks],
+        #     'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
+        #                stock in sh_stocks],
+        # })
+        # gen_table_data({
+        #     'table': 'csdc_s_sec_tran_tst',
+        #     'row_count': 1000000,
+        #     'data_date': str(cur_date),
+        #     'data_file': r'c:\tmp\csdc_s_sec_tran_tst.dat',
+        #     'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
+        #                stock in sz_stocks],
         # })
         gen_table_data({
-            'table': 'csdc_s_sec_tran_tst',
-            'row_count': 1000000,
+            'table': 'sse_sec_idx_quot_tst',
+            'row_count': 1348,
             'data_date': str(cur_date),
-            'data_file': r'c:\tmp\csdc_s_sec_tran_tst.dat',
-            'stocks': [{'stock_id': stock[0], 'close_price': np.random.random() * 99 + 1} for stock in sz_stocks],
+            'data_file': r'c:\tmp\sse_sec_idx_quot_tst.dat',
+            'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
+                       stock in sh_stocks],
+        })
+        gen_table_data({
+            'table': 'szse_sec_td_end_quot_tst',
+            'row_count': 1348,
+            'data_date': str(cur_date),
+            'data_file': r'c:\tmp\szse_sec_td_end_quot_tst.dat',
+            'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
+                       stock in sz_stocks],
         })
