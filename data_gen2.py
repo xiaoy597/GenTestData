@@ -34,15 +34,15 @@ table_definition = [
     {'table': 'csdc_s_sec_tran_tst',
      'columns': [
          {'id': 1, 'name': 'SEC_CDE', 'type': 'STRING', 'expr': "stocks[int({rand})]['stock_id']", 'range': [0, 1347]},
+         {'id': 8, 'name': 'TRAN_PRC', 'type': 'NUMBER', 'expr': "stocks[int({last_rand})]['close_price'] * {rand}",
+          'range': [0.9, 1.1], 'format': '%.2f'},
          {'id': 2, 'name': 'SEAT_CDE', 'type': 'STRING', 'enum': ['000000']},
-         {'id': 3, 'name': 'SHDR_ACCT', 'type': 'NUMBER', 'range': [40000, 60000], 'format': '%020d'},
+         {'id': 3, 'name': 'SHDR_ACCT', 'type': 'NUMBER', 'range': [40000000, 40005000], 'format': '%010d'},
          {'id': 4, 'name': 'TRAD_DIRC', 'type': 'STRING', 'enum': ['B', 'S']},
          {'id': 5, 'name': 'CNTR_NBR', 'type': 'NUMBER', 'expr': '{serial}', 'range': [1, 99999999999], 'format': '%024d'},
          {'id': 6, 'name': 'TRAD_NBR', 'type': 'NUMBER', 'expr': 'CNTR_NBR', 'format': '%018d'},
          {'id': 7, 'name': 'TRANS_VOL', 'type': 'NUMBER', 'range': [1, 9999999],
           'dist': {'type': 'normal', 'mu': 100, 'sigma': 50}},
-         {'id': 8, 'name': 'TRAN_PRC', 'type': 'NUMBER', 'expr': "stocks[int({last_rand})]['close_price'] * {rand}",
-          'range': [0.9, 1.1], 'format': '%.2f'},
          {'id': 9, 'name': 'TRAD_TIME', 'type': 'TIME', 'tm_format': 'HHMMSS',
           'range': [93000, 113100, 130000, 150100]},
          {'id': 10, 'name': 'CMT_FUNC', 'type': 'STRING', 'enum': ['0']},
@@ -182,6 +182,9 @@ def gen_table_data(params):
         value_str += '\n'
         output.write(value_str[1:])
         count += 1
+
+        if count % 10000 == 0:
+            print "%d rows." % count
 
     output.close()
 
@@ -324,27 +327,27 @@ if __name__ == '__main__':
         #     'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
         #                stock in sh_stocks],
         # })
-        # gen_table_data({
-        #     'table': 'csdc_s_sec_tran_tst',
-        #     'row_count': 1000000,
-        #     'data_date': str(cur_date),
-        #     'data_file': r'c:\tmp\csdc_s_sec_tran_tst.dat',
-        #     'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
-        #                stock in sz_stocks],
-        # })
         gen_table_data({
-            'table': 'sse_sec_idx_quot_tst',
-            'row_count': 1348,
+            'table': 'csdc_s_sec_tran_tst',
+            'row_count': 10000000,
             'data_date': str(cur_date),
-            'data_file': r'c:\tmp\sse_sec_idx_quot_tst.dat',
-            'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
-                       stock in sh_stocks],
-        })
-        gen_table_data({
-            'table': 'szse_sec_td_end_quot_tst',
-            'row_count': 1348,
-            'data_date': str(cur_date),
-            'data_file': r'c:\tmp\szse_sec_td_end_quot_tst.dat',
+            'data_file': r'd:\tmp\csdc_s_sec_tran_tst.dat',
             'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
                        stock in sz_stocks],
         })
+        # gen_table_data({
+        #     'table': 'sse_sec_idx_quot_tst',
+        #     'row_count': 1348,
+        #     'data_date': str(cur_date),
+        #     'data_file': r'c:\tmp\sse_sec_idx_quot_tst.dat',
+        #     'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
+        #                stock in sh_stocks],
+        # })
+        # gen_table_data({
+        #     'table': 'szse_sec_td_end_quot_tst',
+        #     'row_count': 1348,
+        #     'data_date': str(cur_date),
+        #     'data_file': r'c:\tmp\szse_sec_td_end_quot_tst.dat',
+        #     'stocks': [{'stock_id': stock[0], 'stock_name': stock[1], 'close_price': np.random.random() * 99 + 1} for
+        #                stock in sz_stocks],
+        # })
